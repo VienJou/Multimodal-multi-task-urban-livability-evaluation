@@ -12,7 +12,7 @@ If you use this code and dataset in your research, please cite:
 ```bibtex
 @article{zhou2026,
   title={A transformer based multi-task deep learning model for urban livability evaluation by fusing remote sensing and textual geospatial data},
-  author={Zhou, Wei and Persello, Claudio and Ming, Dongping and Wang, Shixin and Stein, Alfred},
+  author={Zhou, Wen and Persello, Claudio and Ming, Dongping and Wang, Shaowen and Stein, Alfred},
   journal={Remote Sensing of Environment},
   volume={334},
   pages={115232},
@@ -24,12 +24,12 @@ If you use this code and dataset in your research, please cite:
 ## 🎯 Overview
 
 This project fine-tunes a pre-trained MMBT (Multimodal Bitransformer) model for multi-task regression of urban livability across 6 aspects:
-- **LBM**: Land-based mobility
-- **FYS**: Physical safety
-- **ONV**: Overall neighborhood vibrancy
+- **Livability**: Overall livability
+- **PHY**: Physical Environment
+- **NUI**: Nuisance and Insecurity
 - **SOC**: Social cohesion
-- **VRZ**: Visual residential quality
-- **WON**: Walkability and open space
+- **AME**: Amenities
+- **HOU**: Housing quality
 
 The model combines:
 - **Text features**: Street-level descriptions using BERT-based multilingual transformer
