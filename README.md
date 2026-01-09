@@ -24,16 +24,16 @@ If you use this code and dataset in your research, please cite:
 ## 🎯 Overview
 
 This project fine-tunes a pre-trained MMBT (Multimodal Bitransformer) model for multi-task regression of urban livability across 6 aspects:
-- **Livability**: Overall livability
-- **PHY**: Physical Environment
-- **NUI**: Nuisance and Insecurity
-- **SOC**: Social cohesion
-- **AME**: Amenities
-- **HOU**: Housing quality
+- **Livability**: Overall livability -- (Dutch: LBM)
+- **PHY**: Physical Environment -- (Dutch: FYS)
+- **NUI**: Nuisance and Insecurity -- (Dutch: ONV)
+- **SOC**: Social cohesion -- (Dutch: SOC)
+- **AME**: Amenities -- (Dutch: VRZ)
+- **HOU**: Housing quality -- (Dutch: WON)
 
 The model combines:
-- **Text features**: Street-level descriptions using BERT-based multilingual transformer
-- **Image features**: Three-channel satellite imagery (RS, DSM, GIU) using DenseNet-121 encoder
+- **Text features**:  Point of interes data
+- **Image features**: Three-channel satellite imagery (RS, DSM, NLRS(GIU)) using DenseNet-121 encoder
 
 ## 📊 Dataset
 
