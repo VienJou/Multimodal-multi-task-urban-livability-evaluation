@@ -33,15 +33,16 @@ logger = logging.getLogger(__name__)
 # mapping number of image embeddings to AdaptiveAvgPool2d output size
 POOLING_BREAKDOWN = {1: (1, 1), 2: (2, 1), 3: (3, 1), 4: (2, 2), 5: (5, 1), 6: (3, 2), 7: (7, 1), 8: (4, 2), 9: (3, 3)}
 
-# module assumes that the directory where the saved chexnet weight is in the same level as this module
+# Default: uses PyTorch's pre-trained DenseNet-121 (ImageNet)
+# Optional: can load custom saved model by setting saved_model=True and providing path
 MMBT_DIR_PARENT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR = os.path.join(MMBT_DIR_PARENT, "data_livability")
 MODELS_DIR = os.path.join(DATA_DIR, "models")
 SAVED_CHEXNET_DEFAULT = os.path.join(MODELS_DIR, "saved_chexnet.pt")
 
-# Find saved_chexnet.pt in multiple possible locations
+# Find saved_chexnet.pt in multiple possible locations (only used if saved_model=True)
 def find_saved_chexnet():
-    """Search for saved_chexnet.pt in multiple possible locations"""
+    """Search for saved_chexnet.pt in multiple possible locations (optional, only used if saved_model=True)"""
     possible_paths = [
         # First, check in current project directory
         os.path.join(MMBT_DIR_PARENT, "data_livability", "models", "saved_chexnet.pt"),
@@ -74,13 +75,13 @@ SAVED_CHEXNET = find_saved_chexnet()
 
 
 class ImageEncoderDenseNet(nn.Module):
-    def __init__(self, num_image_embeds, saved_model=True, path=None):
+    def __init__(self, num_image_embeds, saved_model=False, path=None):
         """
 
         :type num_image_embeds: int
         :param num_image_embeds: number of image embeddings to generate; 1-9 as they map to specific numbers of pooling
         output shape in the 'POOLING_BREAKDOWN'
-        :param saved_model: True to load saved pre-trained model False to use torch pre-trained model
+        :param saved_model: True to load saved custom pre-trained model, False to use PyTorch's ImageNet pre-trained DenseNet-121 (default: False)
         :param path: path to the saved .pt model file. If None, will use the automatically found path.
         """
         super().__init__()
@@ -99,16 +100,23 @@ class ImageEncoderDenseNet(nn.Module):
                     f"Or specify the path explicitly using the 'path' parameter."
                 )
             
-            # loading pre-trained weight, e.g. ChexNet
+            # loading custom saved pre-trained weight (e.g., CheXNet or other custom model)
             # the model here expects the weight to be regular Tensors and NOT cuda Tensor
             try:
                 model = torch.load(path, weights_only=False)
             except TypeError:
                 # Handle older torch versions that do not have weights_only parameter
                 model = torch.load(path)
-            logger.info(f"Saved model loaded from: {path}")
+            logger.info(f"Custom saved model loaded from: {path}")
         else:
-            model = torchvision.models.densenet121(pretrained=True)
+            # Use PyTorch's pre-trained DenseNet-121 (ImageNet)
+            # Try new API first (torchvision >= 0.13), fallback to old API for compatibility
+            try:
+                model = torchvision.models.densenet121(weights='IMAGENET1K_V1')
+            except TypeError:
+                # Fallback for older torchvision versions
+                model = torchvision.models.densenet121(pretrained=True)
+            logger.info("Using PyTorch's ImageNet pre-trained DenseNet-121")
 
         # DenseNet architecture last layer is the classifier; we only want everything before that
         modules = list(model.children())[:-1]

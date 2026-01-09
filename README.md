@@ -6,33 +6,34 @@ This repository contains the implementation of a multimodal (text and image) reg
 
 This project implements the methodology described in:
 
-**Paper Title**: [Link to be added - DOI: 10.1016/j.rse.2026.xxxxxx]
-
+**Paper Title**: [A transformer based multi-task deep learning model for urban livability evaluation by fusing remote sensing and textual geospatial data](https://www.sciencedirect.com/science/article/pii/S0034425726000027)
 If you use this code and dataset in your research, please cite:
 
 ```bibtex
-@article{livability2026,
-  title={Multimodal Multi-task Urban Livability Evaluation},
-  author={[Authors]},
+@article{zhou2026,
+  title={A transformer based multi-task deep learning model for urban livability evaluation by fusing remote sensing and textual geospatial data},
+  author={Zhou, Wen and Persello, Claudio and Ming, Dongping and Wang, Shaowen and Stein, Alfred},
   journal={Remote Sensing of Environment},
+  volume={334},
+  pages={115232},
   year={2026},
-  doi={10.1016/j.rse.2026.xxxxxx}
+  doi={10.1016/j.rse.2026.115232}
 }
 ```
 
 ## 🎯 Overview
 
 This project fine-tunes a pre-trained MMBT (Multimodal Bitransformer) model for multi-task regression of urban livability across 6 aspects:
-- **LBM**: Land-based mobility
-- **FYS**: Physical safety
-- **ONV**: Overall neighborhood vibrancy
-- **SOC**: Social cohesion
-- **VRZ**: Visual residential quality
-- **WON**: Walkability and open space
+- **Livability**: Overall livability -- (Dutch: LBM)
+- **PHY**: Physical Environment -- (Dutch: FYS)
+- **NUI**: Nuisance and Insecurity -- (Dutch: ONV)
+- **SOC**: Social cohesion -- (Dutch: SOC)
+- **AME**: Amenities -- (Dutch: VRZ)
+- **HOU**: Housing quality -- (Dutch: WON)
 
 The model combines:
-- **Text features**: Street-level descriptions using BERT-based multilingual transformer
-- **Image features**: Three-channel satellite imagery (RS, DSM, GIU) using DenseNet-121 encoder
+- **Text features**:  Point of interes data
+- **Image features**: Three-channel satellite imagery (RS, DSM, NLRS(GIU)) using DenseNet-121 encoder
 
 ## 📊 Dataset
 
@@ -77,9 +78,7 @@ pip install numpy pandas matplotlib seaborn
 pip install tensorboard
 ```
 
-3. Download the pre-trained image encoder model:
-   - The code expects `saved_chexnet.pt` (DenseNet-121 pre-trained on CheXNet) in `data_livability/models/`
-   - You may need to download this separately or train it yourself
+**Note**: The image encoder uses PyTorch's pre-trained DenseNet-121 (ImageNet) by default. The model will be automatically downloaded when you first run the code. No additional model files are required.
 
 ## 📁 Project Structure
 
@@ -93,13 +92,10 @@ Livability_evaluation_baseline/
 │   ├── mmbt_liva.py                            # MMBT model implementation
 │   ├── image_liva.py                           # Image encoder (DenseNet-121)
 │   └── mmbt_utils_liva_0318.py                 # Dataset loading and utilities
-├── livability_4M_6aspects/                      # Model checkpoints and outputs
-│   ├── pytorch_model.bin                       # Final trained model
-│   ├── checkpoint-*/                           # Training checkpoints
-│   └── eval_results.txt                        # Evaluation results
-└── data_livability/                            # Data directory (not included in repo)
-    └── models/
-        └── saved_chexnet.pt                     # Pre-trained image encoder
+└── livability_4M_6aspects/                      # Model checkpoints and outputs
+    ├── pytorch_model.bin                       # Final trained model
+    ├── checkpoint-*/                           # Training checkpoints
+    └── eval_results.txt                        # Evaluation results
 ```
 
 ## 💻 Usage
@@ -164,7 +160,7 @@ tokenizer = AutoTokenizer.from_pretrained("bert-base-multilingual-uncased")
 ### Model Architecture
 
 - **Text Encoder**: BERT-base-multilingual-uncased (12 layers, 768 hidden size)
-- **Image Encoder**: DenseNet-121 (pre-trained on CheXNet)
+- **Image Encoder**: DenseNet-121 (pre-trained on ImageNet via PyTorch)
 - **Image Input**: 3 images concatenated (RS + DSM + GIU = 9 channels)
 - **Number of Labels**: 6 (multi-task regression)
 - **Modal Hidden Size**: 1024
@@ -198,7 +194,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 - This implementation is adapted from the Hugging Face [MMBT implementation](https://github.com/huggingface/transformers/blob/8ea412a86faa8e9edeeb6b5c46b08def06aa03ea/examples/research_projects/mm-imdb/run_mmimdb.py)
 - The MMBT architecture is based on the work by Kiela et al. (2020)
-- Image encoder uses DenseNet-121 pre-trained on CheXNet
+- Image encoder uses DenseNet-121 pre-trained on ImageNet (via PyTorch's torchvision)
 
 ## 📧 Contact
 
