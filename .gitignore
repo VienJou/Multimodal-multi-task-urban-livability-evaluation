@@ -1,0 +1,80 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb_checkpoints
+
+# Model files (too large for GitHub)
+*.bin
+*.pt
+*.pth
+*.h5
+*.ckpt
+livability_4M_6aspects/pytorch_model.bin
+livability_4M_6aspects/checkpoint-*/pytorch_model.bin
+data_livability/models/saved_chexnet.pt
+
+# Data directories
+data_livability/
+*.csv
+*.jsonl
+*.parquet
+
+# Logs and outputs (exclude large output files, but keep config files)
+*.log
+# Exclude large output files, but keep requirements.txt and config files
+livability_4M_6aspects/eval_results.txt
+livability_4M_6aspects/training_log.txt
+livability_4M_6aspects/final_eval_results.txt
+# Exclude checkpoint directories (contain large model files)
+livability_4M_6aspects/checkpoint-*/
+
+# Environment
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# TensorBoard
+runs/
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
