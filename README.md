@@ -10,12 +10,14 @@ This project implements the methodology described in:
 If you use this code and dataset in your research, please cite:
 
 ```bibtex
-@article{livability2026,
-  title={Multimodal Multi-task Urban Livability Evaluation},
-  author={[Authors]},
+@article{zhou2026,
+  title={A transformer based multi-task deep learning model for urban livability evaluation by fusing remote sensing and textual geospatial data},
+  author={Zhou, Wei and Persello, Claudio and Ming, Dongping and Wang, Shixin and Stein, Alfred},
   journal={Remote Sensing of Environment},
+  volume={334},
+  pages={115232},
   year={2026},
-  doi={10.1016/j.rse.2026.xxxxxx}
+  doi={10.1016/j.rse.2026.115232}
 }
 ```
 
