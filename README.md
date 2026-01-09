@@ -6,8 +6,7 @@ This repository contains the implementation of a multimodal (text and image) reg
 
 This project implements the methodology described in:
 
-**Paper Title**: [Link to be added - DOI: 10.1016/j.rse.2026.xxxxxx]
-
+**Paper Title**: [A transformer based multi-task deep learning model for urban livability evaluation by fusing remote sensing and textual geospatial data](https://www.sciencedirect.com/science/article/pii/S0034425726000027)
 If you use this code and dataset in your research, please cite:
 
 ```bibtex
