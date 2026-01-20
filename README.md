@@ -161,7 +161,7 @@ tokenizer = AutoTokenizer.from_pretrained("bert-base-multilingual-uncased")
 
 - **Text Encoder**: BERT-base-multilingual-uncased (12 layers, 768 hidden size)
 - **Image Encoder**: DenseNet-121 (pre-trained on ImageNet via PyTorch)
-- **Image Input**: 3 images concatenated (RS + DSM + GIU = 9 channels)
+- **Image Input**: 3 images concatenated (RS + DSM + NLRS = 9 channels)
 - **Number of Labels**: 6 (multi-task regression)
 - **Modal Hidden Size**: 1024
 
@@ -188,7 +188,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## 📝 License
 
-[Add your license here]
+[cc-by-nc-4.0]
 
 ## 🙏 Acknowledgments
 
@@ -196,11 +196,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 - The MMBT architecture is based on the work by Kiela et al. (2020)
 - Image encoder uses DenseNet-121 pre-trained on ImageNet (via PyTorch's torchvision)
 
-## 📧 Contact
 
-For questions or issues, please open an issue on GitHub or contact [your email].
-
----
 
 **Note**: This repository is part of ongoing research. Please refer to the paper for detailed methodology and results.
 
