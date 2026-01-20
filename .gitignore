@@ -24,7 +24,7 @@ wheels/
 .ipynb_checkpoints
 *.ipynb_checkpoints
 
-# Model files (too large for GitHub)
+# Model files (too large for GitHub - use Hugging Face Model Hub instead)
 *.bin
 *.pt
 *.pth
@@ -33,6 +33,8 @@ wheels/
 livability_4M_6aspects/pytorch_model.bin
 livability_4M_6aspects/checkpoint-*/pytorch_model.bin
 data_livability/models/saved_chexnet.pt
+# Exclude checkpoint directories (contain large model files)
+livability_4M_6aspects/checkpoint-*/
 
 # Data directories
 data_livability/
