@@ -103,6 +103,41 @@ The dataset is loaded from Hugging Face automatically:
 - No local dataset files needed
 - First run will download the dataset (cached for subsequent runs)
 
+### 🔐 Hugging Face Authentication
+
+**Important**: The dataset requires Hugging Face authentication. You need to login before running the notebook:
+
+```bash
+# Install huggingface_hub if not already installed
+pip install huggingface_hub
+
+# Login to Hugging Face
+huggingface-cli login
+```
+
+When prompted, enter your Hugging Face token. You can get your token from:
+- https://huggingface.co/settings/tokens
+
+**Alternative methods** (if CLI login doesn't work):
+
+1. **Set environment variable**:
+```bash
+export HF_TOKEN=your_token_here
+```
+
+2. **In Python/Jupyter** (before loading dataset):
+```python
+import os
+os.environ['HF_TOKEN'] = 'your_token_here'
+```
+
+3. **Direct token in code** (modify `load_examples` function):
+```python
+hf_dataset_dict = load_dataset("Vinjou/Multimodal_urban_livability_evaluation_dataset", token="your_token_here")
+```
+
+The code will automatically detect and use your token if you've logged in via `huggingface-cli login`.
+
 ## ⚙️ Configuration
 
 ### Default Settings
@@ -137,12 +172,17 @@ parser.add_argument(
 2. Verify the project structure matches the expected layout
 3. The code will print debug information showing which paths it's checking
 
-### Issue: Dataset download fails
+### Issue: Dataset download fails / ConnectionError / Unauthorized
 
 **Solution**:
-1. Check your internet connection
-2. Verify Hugging Face access: `huggingface-cli login` (if needed)
-3. Check disk space for dataset cache
+1. **Authentication required**: Run `huggingface-cli login` and enter your token
+2. Check your internet connection
+3. Verify you have access to the dataset (check dataset page on Hugging Face)
+4. Check disk space for dataset cache
+5. If using a web platform, ensure the platform allows Hugging Face access
+
+**Common Error**: `ConnectionError: Unauthorized for URL... Please use the parameter token=True`
+- This means you need to authenticate. Run `huggingface-cli login` first.
 
 ## 📝 Notes
 
