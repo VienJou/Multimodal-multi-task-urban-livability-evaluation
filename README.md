@@ -88,18 +88,24 @@ pip install tensorboard
 ```
 Livability_evaluation_baseline/
 ├── README.md                                    # This file
+├── SETUP.md                                     # Detailed setup instructions
+├── requirements.txt                             # Python dependencies
 ├── Livability_evaluation_baseline_EN_Clean_v5.ipynb  # Main training/evaluation notebook
+├── Livability_Dataset_Showcase.ipynb            # Dataset visualization notebook
 ├── textBert_utils.py                           # Utility functions for BERT/text processing
 ├── MMBT_liva/
 │   ├── mmbt_config_liva.py                     # MMBT configuration class
 │   ├── mmbt_liva.py                            # MMBT model implementation
 │   ├── image_liva.py                           # Image encoder (DenseNet-121)
 │   └── mmbt_utils_liva_0318.py                 # Dataset loading and utilities
-└── livability_4M_6aspects/                      # Model checkpoints and outputs
-    ├── pytorch_model.bin                       # Final trained model
-    ├── checkpoint-*/                           # Training checkpoints
-    └── eval_results.txt                        # Evaluation results
+└── livability_4M_6aspects/                      # Model checkpoints and outputs (created during training)
+    ├── pytorch_model.bin                       # Final trained model (~669MB, not in repo)
+    ├── checkpoint-*/                           # Training checkpoints (not in repo)
+    ├── config.json                             # Model configuration
+    └── tokenizer*.json                         # Tokenizer files
 ```
+
+**Note**: Model files (`*.bin`, ~669MB each) are excluded from the repository via `.gitignore` due to GitHub file size limitations. These files are created automatically when you train the model.
 
 ## 💻 Usage
 
@@ -141,6 +147,13 @@ To run evaluation only, set:
 args.do_train = False
 args.do_eval = True
 ```
+
+**⚠️ Important Note about Model Files**:
+- Model files (`pytorch_model.bin`, ~669MB each) are **not included** in this GitHub repository due to file size limitations
+- To run evaluation, you need to either:
+  1. **Train the model first**: Set `args.do_train = True` and train the model (this will save `pytorch_model.bin` in `livability_4M_6aspects/`)
+  2. **Use a pre-trained model**: If you have access to a pre-trained model, place the `pytorch_model.bin` file in the `livability_4M_6aspects/` directory
+- The `.gitignore` file excludes large model files (`.bin`, `.pt`) to keep the repository size manageable
 
 ### Using Pre-trained Model
 
