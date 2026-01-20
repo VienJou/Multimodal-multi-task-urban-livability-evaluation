@@ -7,6 +7,8 @@ This guide explains how to set up and run the notebooks on a new server.
 1. **Python Environment**: Python 3.8+ with required packages (see `requirements.txt`)
 2. **Git**: To clone the repository
 3. **GPU** (recommended): CUDA-capable GPU for faster training
+   - **CPU is supported**: The code will automatically detect and use CPU if no GPU is available
+   - **Note**: Training on CPU will be significantly slower (10-100x slower than GPU)
 
 ## 🚀 Quick Start
 
@@ -183,6 +185,30 @@ parser.add_argument(
 
 **Common Error**: `ConnectionError: Unauthorized for URL... Please use the parameter token=True`
 - This means you need to authenticate. Run `huggingface-cli login` first.
+
+### Issue: Running on CPU (No GPU)
+
+**Solution**: The code automatically detects and uses CPU if no GPU is available. However, for better performance on CPU:
+
+1. **Reduce batch size** in Cell 14 (Argument Parsing):
+   ```python
+   parser.add_argument("--train_batch_size", default=4, type=int, ...)  # Reduce from 16 to 4 or 2
+   parser.add_argument("--eval_batch_size", default=4, type=int, ...)    # Reduce from 16 to 4 or 2
+   ```
+
+2. **Reduce number of workers**:
+   ```python
+   parser.add_argument("--num_workers", type=int, default=2, ...)  # Reduce from 8 to 2 or 0
+   ```
+
+3. **Use smaller dataset subset** for testing (modify `load_examples` to use a subset)
+
+4. **Expected performance**:
+   - GPU: Training typically takes hours
+   - CPU: Training may take days or weeks depending on dataset size
+   - Evaluation on CPU is more feasible but still slower
+
+**Note**: The code will automatically print "No GPU available, using the CPU instead." when running on CPU.
 
 ## 📝 Notes
 

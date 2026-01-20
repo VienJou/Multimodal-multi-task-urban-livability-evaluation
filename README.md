@@ -56,7 +56,10 @@ dataset = load_dataset("Vinjou/Multimodal_urban_livability_evaluation_dataset")
 - Python 3.8+
 - PyTorch 1.8+
 - Transformers 4.0+
-- CUDA-capable GPU (recommended)
+- **GPU (recommended)**: CUDA-capable GPU for faster training
+  - **CPU is supported**: The code automatically detects and uses CPU if no GPU is available
+  - **Note**: Training on CPU will be significantly slower (10-100x slower than GPU)
+  - For CPU usage, consider reducing batch size (see SETUP.md for details)
 
 ### Setup
 
