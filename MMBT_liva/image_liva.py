@@ -68,7 +68,8 @@ def find_saved_chexnet():
             return abs_path
     
     # If not found, return default path (may not exist)
-    logger.warning(f"saved_chexnet.pt not found in any of the expected locations. Using default: {SAVED_CHEXNET_DEFAULT}")
+    # Note: this warning only matters if saved_model=True is used
+    logger.debug(f"saved_chexnet.pt not found in any of the expected locations. Using default: {SAVED_CHEXNET_DEFAULT}")
     return os.path.abspath(SAVED_CHEXNET_DEFAULT)
 
 SAVED_CHEXNET = find_saved_chexnet()
