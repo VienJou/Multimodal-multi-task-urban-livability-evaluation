@@ -44,10 +44,9 @@ ASPECTS: Dict[str, str] = {
     "won": "Housing quality, HOU (WON)",
 }
 
-# Colour scales: LBM is a magnitude (sequential, one hue); the five dimensions
-# are signed contributions around 0 (diverging, gray midpoint).
-SEQUENTIAL_BLUE = ["#cde2fb", "#86b6ef", "#3987e5", "#1c5cab", "#0d366b"]
-DIVERGING_RED_BLUE = ["#e34948", "#f0efec", "#256abf"]
+# Colour ramp of the livability maps in the paper: red (low) - yellow - blue (high).
+# The five dimensions are signed contributions, so their scale is centred on 0 (yellow).
+RED_YELLOW_BLUE = ["#d7302a", "#f08a4b", "#fbd68a", "#ffffc8", "#c4d3d9", "#8ba6cd", "#4a6fb5"]
 
 GRAY_CANVAS_URL = ("https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/"
                    "World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}")
@@ -161,16 +160,39 @@ def _feature_collection(df: pd.DataFrame, props: List[str]) -> dict:
     return {"type": "FeatureCollection", "features": features}
 
 
+def _refit_element(corners: List[List[float]]):
+    """Return a map child that re-fits the view once the notebook has sized the map frame.
+
+    Inside a notebook the frame can get its final size after Leaflet has already
+    fitted the bounds, which leaves the cells off-centre.
+    """
+    from branca.element import MacroElement
+    from jinja2 import Template
+
+    element = MacroElement()
+    element._template = Template("""
+        {% macro script(this, kwargs) %}
+        (function () {
+            var map = {{ this._parent.get_name() }}, corners = """ + json.dumps(corners) + """, left = 3;
+            function refit() { map.invalidateSize(); map.fitBounds(corners); }
+            window.addEventListener("load", function () { setTimeout(refit, 300); });
+            window.addEventListener("resize", function () { if (left-- > 0) { refit(); } });
+        })();
+        {% endmacro %}
+    """)
+    return element
+
+
 def _colormap(values: np.ndarray, aspect: str):
     import branca.colormap as cm
 
     if aspect == "lbm":
         vmin, vmax = np.nanpercentile(values, [2, 98])
-        return cm.LinearColormap(SEQUENTIAL_BLUE, vmin=vmin, vmax=vmax,
-                                 caption=f"{ASPECTS[aspect]} - score")
+        return cm.LinearColormap(RED_YELLOW_BLUE, vmin=vmin, vmax=vmax,
+                                 caption=f"{ASPECTS[aspect]} - low (red) to high (blue)")
     bound = float(np.nanpercentile(np.abs(values), 98))
-    return cm.LinearColormap(DIVERGING_RED_BLUE, vmin=-bound, vmax=bound,
-                             caption=f"{ASPECTS[aspect]} - below (red) / above (blue) average")
+    return cm.LinearColormap(RED_YELLOW_BLUE, vmin=-bound, vmax=bound,
+                             caption=f"{ASPECTS[aspect]} - below (red) / above (blue) the reference level")
 
 
 def build_map(cells: pd.DataFrame, aspect: str = "lbm",
@@ -238,8 +260,9 @@ def build_map(cells: pd.DataFrame, aspect: str = "lbm",
     folium.LayerControl(collapsed=False).add_to(fmap)
     bounds = rd_to_wgs84(np.array([cells["rd_x"].min(), cells["rd_x"].max() + CELL_SIZE_M]),
                          np.array([cells["rd_y"].min(), cells["rd_y"].max() + CELL_SIZE_M]))
-    fmap.fit_bounds([[float(bounds[0][0]), float(bounds[1][0])],
-                     [float(bounds[0][1]), float(bounds[1][1])]])
+    corners = [[float(bounds[0][0]), float(bounds[1][0])], [float(bounds[0][1]), float(bounds[1][1])]]
+    fmap.fit_bounds(corners)
+    fmap.add_child(_refit_element(corners))
     return fmap
 
 
