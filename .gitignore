@@ -71,6 +71,9 @@ venv.bak/
 .DS_Store
 Thumbs.db
 
+# Generated map HTML (livability_map.py)
+maps/
+
 # TensorBoard
 runs/
 logs/

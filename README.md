@@ -93,6 +93,7 @@ Livability_evaluation_baseline/
 ├── Livability_evaluation_baseline_EN_Clean_v5.ipynb  # Main training/evaluation notebook
 ├── Livability_Dataset_Showcase.ipynb            # Dataset visualization notebook
 ├── textBert_utils.py                           # Utility functions for BERT/text processing
+├── livability_map.py                           # Interactive map of scores/predictions on the 100 m grid
 ├── MMBT_liva/
 │   ├── mmbt_config_liva.py                     # MMBT configuration class
 │   ├── mmbt_liva.py                            # MMBT model implementation
@@ -108,6 +109,15 @@ Livability_evaluation_baseline/
 **Note**: Model files (`*.bin`, ~669MB each) are excluded from the repository via `.gitignore` due to GitHub file size limitations. These files are created automatically when you train the model.
 
 ## 💻 Usage
+
+### Interactive livability map (no GPU or token needed)
+
+The section *Mapping livability on the 100 m grid* in the main notebook draws the test cells of Beesel, Dordrecht, Eindhoven and Hengelo on an interactive map from the files in `json/`. Set `CITIES` and `ASPECT` and re-run the cell. After you run the evaluation, `evaluate()` also writes `livability_4M_6aspects/test_predictions.csv`, and the map adds the model predictions as an extra layer.
+
+```python
+from livability_map import load_cells, build_map
+build_map(load_cells(["Eindhoven"]), aspect="soc")
+```
 
 ### Training
 
